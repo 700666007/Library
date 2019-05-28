@@ -8,17 +8,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import utils.MyUtils;
-
 public abstract class Database implements IDatabase {
 
-	protected abstract Connection getConn();
+	protected abstract Connection _getConn();
 	
 	@Override
 	public Map<String, String> row(String table, int id) throws Exception {
 		Map<String,String> ris = new LinkedHashMap<String,String>();
-		Connection conn = getConn();
-		String query = MyUtils.makeSelectQuery(table)+" WHERE id = "+id;
+		Connection conn = _getConn();
+		String query = "SELECT * FROM "+table+" WHERE id = "+id;
 		ResultSet rs = conn.createStatement().executeQuery(query);
         if(rs.next())
 	        for(int i=1;i<=rs.getMetaData().getColumnCount();i++)
@@ -34,7 +32,7 @@ public abstract class Database implements IDatabase {
 	@Override
 	public List<Map<String, String>> rows(String sql) throws Exception {
 		List<Map<String,String>> ris = new ArrayList<Map<String,String>>();
-		Connection conn = getConn();
+		Connection conn = _getConn();
         ResultSet rs = conn.createStatement().executeQuery(sql);
 		while(rs.next()) {
 			Map<String,String> row = new LinkedHashMap<String,String>();
@@ -53,7 +51,7 @@ public abstract class Database implements IDatabase {
 	@Override
 	public List<Map<String, String>> rows(String sql, String[] parameters) throws Exception {
 		List<Map<String,String>> ris = new ArrayList<Map<String,String>>();
-        Connection conn = getConn();
+        Connection conn = _getConn();
         PreparedStatement ps = conn.prepareStatement(sql);
         for (int i = 0;i < parameters.length;i++)
         	ps.setString(i+1,parameters[i]);
@@ -76,7 +74,7 @@ public abstract class Database implements IDatabase {
 	
 	@Override
 	public boolean execute(String sql) throws Exception {
-		Connection conn = getConn();
+		Connection conn = _getConn();
 		conn.createStatement().execute(sql);
 		conn.close();
 		return true;
@@ -84,7 +82,7 @@ public abstract class Database implements IDatabase {
 	
 	@Override
 	public boolean execute(String sql, String[] parameters) throws Exception {
-		Connection conn = getConn();
+		Connection conn = _getConn();
 		PreparedStatement ps = conn.prepareStatement(sql);
         for(int i=0;i<parameters.length;i++)
         	ps.setString(i+1, parameters[i]);

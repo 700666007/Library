@@ -19,7 +19,7 @@ public class LibraryDaoImpl implements LibraryDao {
 	public List<Book> getBooksList() {
 		List<Book> ris = new ArrayList<>();
 		try {
-			for(Map<String,String> bmap : db.fetch("books") ) {
+			for(Map<String,String> bmap : db.fetch("*","books") ) {
 				Book book = Factory.makeBook(bmap);
 				if(book!=null)
 					ris.add(book);
@@ -29,12 +29,48 @@ public class LibraryDaoImpl implements LibraryDao {
 		}
 		return ris;
 	}
-	/*
-	 * newbook
-	 * newgenre
-	 * delgenre
-	 * setgenre
-	 * getgenreslist
-	 * gettitleslist
-	 */
+
+	@Override
+	public List<String> getGenresList() {
+		List<String> ris = new ArrayList<>();
+		try {
+			for(Map<String,String> gmap : db.fetch("val","genres"))
+				ris.add(gmap.get("val"));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return ris;
+	}
+
+	@Override
+	public List<String> getTitlesList() {
+		List<String> ris = new ArrayList<>();
+		try {
+			for(Map<String,String> gmap : db.fetch("val","genres"))
+				ris.add(gmap.get("val"));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return ris;
+	}
+
+	@Override
+	public boolean newBook(Book b) {
+		return db.insert("books", b.toMap());
+	}
+
+	@Override
+	public boolean newGenre(String gen) {
+		return db.insert("genres","val",gen);
+	}
+
+	@Override
+	public boolean delGenre(String gen) {
+		return db.delete("genres","val",gen);
+	}
+
+	@Override
+	public boolean setGenre(String tit, String gen) {
+		return db.update("books", "genre", gen, tit);
+	}
 }

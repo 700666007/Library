@@ -3,6 +3,7 @@ package dbms;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,9 +63,9 @@ public class MySqlDb extends Database implements IDatabase {
 	}
 
 	// FETCH, DELETE, INSERT, UPDATE ==================================================================================================================================
-	public List<Map<String,String>> fetch(String table) {
+	public List<Map<String,String>> fetch(String content, String table) {
 		try {
-			return rows("SELECT * FROM ", "table".split("-"));
+			return rows("SELECT ? FROM ?", "content-table".split("-"));
 		} catch(Exception e) {
 			InOut.printException("Operation (FETCH) failed. Reason: ",e);
 		}
@@ -80,6 +81,11 @@ public class MySqlDb extends Database implements IDatabase {
 		}
 		return false;
 	}
+	public boolean insert(String table, String column, String value) {
+		Map<String,String> map = new HashMap<>();
+		map.put(column, value);
+		return insert(table,map);
+	}
 	public boolean insert(String table, Map<String,String> map) {
 		try {
 			if(execute("INSERT INTO ? (?) VALUES (?)", 
@@ -92,10 +98,10 @@ public class MySqlDb extends Database implements IDatabase {
 		}
 		return false;
 	}
-	public boolean update(String table, String colName, String newValue, String id) {
-		try {
-			if(execute("UPDATE ? SET ? = ? WHERE id = ?", "table-colName-newValue-id".split("-")))
-				InOut.print("Updated '"+table+"': '"+colName+"' of element "+id+" set to '"+newValue+"'");
+	public boolean update(String table, String column, String newValue, String id) {
+		try {								// TODO dovrebbe essere id non title
+			if(execute("UPDATE ? SET ? = ? WHERE title = ?", "table-colName-newValue-id".split("-")))
+				InOut.print("Updated '"+table+"': '"+column+"' of element "+id+" set to '"+newValue+"'");
 			return true;
 		} catch(Exception e) {
 			InOut.printException("Operation (UPDATE) failed. Reason: ",e);
