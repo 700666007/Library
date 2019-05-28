@@ -1,5 +1,9 @@
 package utils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-public class MyUtils {
+public abstract class MyUtils {
 
 	// COMMA SEPARETED STRINGS =======================================================================================================================
 	public static <T> String commaSepValues(List<T> list) {
@@ -80,14 +84,35 @@ public class MyUtils {
 		}
 	}
 
-
-
-	
-
-
-
-
-
+	// FILE MANAGEMENT =======================================================================================================================
+	public static File createNewFile(String path) {
+		try {
+			File file = new File(path);
+			if(file.exists())
+				InOut.print("File "+path+" already exists.");
+			else if(file.createNewFile())
+				InOut.print("File "+path+" successfully created.");
+			else
+				InOut.print("File "+path+" cannot be created.");
+			return file;
+		} catch(IOException e) {
+			InOut.printException("File creation failed.",e);
+			return null;
+		}
+	}
+	public static boolean write(File file, String str) {
+		try {
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(str);
+			bw.flush();
+			bw.close();
+			return true;
+		} catch(IOException e) {
+			InOut.printException("Couldn't write to file..", e);
+			return false;
+		}
+	}
 
 
 //	private static String _removeLastNChars(String s, int n) {

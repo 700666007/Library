@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 
 import entities.Book;
 import entities.LibraryDao;
+import log.Log;
 import utils.Factory;
 
 /**
@@ -30,8 +31,10 @@ public class Index extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
 	LibraryDao library;
+	Log log;
 	
-    public Index()  { 
+    public Index()  {
+    	log = Log.getInstance();
     	library = Factory.makeLibrary();
     }
     

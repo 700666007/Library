@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import utils.InOut;
+import log.Log;
 import utils.MyUtils;
 
 public class MySqlDb extends Database implements IDatabase {
@@ -50,15 +50,19 @@ public class MySqlDb extends Database implements IDatabase {
 	public void setUsername(String username) { this.username = username; }
 	public void setPassword(String password) { this.password = password; }
 	
+	Log logger = Log.getInstance();
+	
 	// CONNECTION ==================================================================================================================================
 	protected Connection _getConn() {
+		logger.info("Connecting to "+address+"...");
 		Connection conn = null;
 		try {
 			Class.forName(DRIVER_NAME);
 			conn = DriverManager.getConnection(path);
 		} catch(Exception e) {
-			InOut.printException("Connection failed. Reason: ",e);
+			logger.error("Connection failed.",e);
 		}
+		logger.info("Connection established!");
 		return conn;
 	}
 
@@ -67,17 +71,17 @@ public class MySqlDb extends Database implements IDatabase {
 		try {
 			return rows("SELECT ? FROM ?", "content-table".split("-"));
 		} catch(Exception e) {
-			InOut.printException("Operation (FETCH) failed. Reason: ",e);
+			logger.error("Operation (FETCH) failed.",e);
 		}
 		return new ArrayList<Map<String,String>>();
 	}
 	public boolean delete(String table, String key, String value) {
 		try {
 			if(execute("DELETE FROM ? WHERE ? = '?'", "table-key-value".split("-")))
-				InOut.print("Deleted '"+key+":"+value+" from '"+table+"'");
+				logger.info("Deleted '"+key+":"+value+" from '"+table+"'");
 			return true;
 		} catch(Exception e) {
-			InOut.printException("Operation (DELETE) failed. Reason: ",e);
+			logger.error("Operation (DELETE) failed.",e);
 		}
 		return false;
 	}
@@ -91,20 +95,20 @@ public class MySqlDb extends Database implements IDatabase {
 			if(execute("INSERT INTO ? (?) VALUES (?)", 
 						new String[] { table, MyUtils.commaSepValues(MyUtils.set2list(map.keySet())),
 											  MyUtils.commaSepValues(MyUtils.set2list(map.values())) }))
-				InOut.print("Inserted into '"+table+"' value "+MyUtils.renderMap(map));
+				logger.info("Inserted into '"+table+"' value "+MyUtils.renderMap(map));
 			return true;
 		} catch(Exception e) {
-			InOut.printException("Operation (INSERT) failed. Reason: ",e);
+			logger.error("Operation (INSERT) failed.",e);
 		}
 		return false;
 	}
 	public boolean update(String table, String column, String newValue, String id) {
 		try {								// TODO dovrebbe essere id non title
 			if(execute("UPDATE ? SET ? = ? WHERE title = ?", "table-colName-newValue-id".split("-")))
-				InOut.print("Updated '"+table+"': '"+column+"' of element "+id+" set to '"+newValue+"'");
+				logger.info("Updated '"+table+"': '"+column+"' of element "+id+" set to '"+newValue+"'");
 			return true;
 		} catch(Exception e) {
-			InOut.printException("Operation (UPDATE) failed. Reason: ",e);
+			logger.error("Operation (UPDATE) failed.",e);
 		}
 		return false;
 	}

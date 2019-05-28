@@ -7,7 +7,7 @@ import entities.Book;
 import entities.LibraryDao;
 import entities.LibraryDaoImpl;
 
-public class Factory {
+public abstract class Factory {
 	
 	public static MySqlDb makeDb(String dbAddress, String schemaName, String username, String password) {
 		MySqlDb mysqldb = new MySqlDb(dbAddress, schemaName, username, password);

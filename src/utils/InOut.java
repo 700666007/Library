@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class InOut {
+public abstract class InOut {
 	
 	// PROPERTIES ==================================================================================================================================
 	private static String marginPattern = ">>>";
@@ -16,7 +16,7 @@ public class InOut {
 		System.out.println(_addMargin(text));
 	}
 	public static void printException(String message, Exception e) {
-		print(message);
+		print(message+" Reason:");
 		e.printStackTrace();
 	}
 	public static void printList(List<Integer> list) { print(MyUtils.renderList(list)); }
