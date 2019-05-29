@@ -15,10 +15,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import dbms.LibraryDao;
 import entities.Book;
-import entities.LibraryDao;
-import log.Log;
 import utils.Factory;
+import utils.Log;
 
 /**
  * Servlet implementation class Index
@@ -30,12 +30,13 @@ public class Index extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-	LibraryDao library;
-	Log log;
+	private Log logger;
+	private LibraryDao library;
 	
     public Index()  {
-    	log = Log.getInstance();
+    	logger = Log.getInstance();
     	library = Factory.makeLibrary();
+    	logger.info("APPLICATION STARTED");
     }
     
 	/**
@@ -43,6 +44,7 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		logger.info("Incoming GET request...");
 		Gson gson = new Gson();
 		
 		List<Book> booksList = library.getBooksList();
@@ -57,7 +59,8 @@ public class Index extends HttpServlet {
 		JsonArray jsonArr = jsonBooks.getAsJsonArray();
 		jsonArr.add(jsonTitlesList.getAsJsonArray());
 		jsonArr.add(jsonGenresList.getAsJsonArray());
-		
+
+		logger.info("Printing response...");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonArr);
 	}
@@ -67,6 +70,7 @@ public class Index extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		logger.info("Incoming POST request...");
 		Map<String,String> pmap = new HashMap<>();
 		for(String key : request.getParameterMap().keySet())
 			pmap.put(key, request.getParameter(key));
@@ -83,7 +87,7 @@ public class Index extends HttpServlet {
 					library.delGenre(pmap.get("val"));
 					break;
 				case "setGenre":	
-					library.setGenre(pmap.get("tit"),pmap.get("gen"));
+					library.changeGenre(pmap.get("tit"),pmap.get("gen"));
 					break;
 			}
 	}

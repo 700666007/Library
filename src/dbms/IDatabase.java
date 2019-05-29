@@ -6,7 +6,7 @@ import java.util.Map;
 import utils.Factory;
 
 public interface IDatabase {
-	
+
 	static IDatabase make(String address, String schema, String username, String password) {
 		return Factory.makeDb(address, schema, username, password);
 	}

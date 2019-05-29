@@ -8,14 +8,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Database implements IDatabase {
+abstract class Database implements IDatabase {
 
-	protected abstract Connection _getConn();
+	protected abstract Connection getConn();
 	
 	@Override
 	public Map<String, String> row(String table, int id) throws Exception {
 		Map<String,String> ris = new LinkedHashMap<String,String>();
-		Connection conn = _getConn();
+		Connection conn = getConn();
 		String query = "SELECT * FROM "+table+" WHERE id = "+id;
 		ResultSet rs = conn.createStatement().executeQuery(query);
         if(rs.next())
@@ -32,7 +32,7 @@ public abstract class Database implements IDatabase {
 	@Override
 	public List<Map<String, String>> rows(String sql) throws Exception {
 		List<Map<String,String>> ris = new ArrayList<Map<String,String>>();
-		Connection conn = _getConn();
+		Connection conn = getConn();
         ResultSet rs = conn.createStatement().executeQuery(sql);
 		while(rs.next()) {
 			Map<String,String> row = new LinkedHashMap<String,String>();
@@ -51,7 +51,7 @@ public abstract class Database implements IDatabase {
 	@Override
 	public List<Map<String, String>> rows(String sql, String[] parameters) throws Exception {
 		List<Map<String,String>> ris = new ArrayList<Map<String,String>>();
-        Connection conn = _getConn();
+        Connection conn = getConn();
         PreparedStatement ps = conn.prepareStatement(sql);
         for (int i = 0;i < parameters.length;i++)
         	ps.setString(i+1,parameters[i]);
@@ -74,7 +74,7 @@ public abstract class Database implements IDatabase {
 	
 	@Override
 	public boolean execute(String sql) throws Exception {
-		Connection conn = _getConn();
+		Connection conn = getConn();
 		conn.createStatement().execute(sql);
 		conn.close();
 		return true;
@@ -82,7 +82,7 @@ public abstract class Database implements IDatabase {
 	
 	@Override
 	public boolean execute(String sql, String[] parameters) throws Exception {
-		Connection conn = _getConn();
+		Connection conn = getConn();
 		PreparedStatement ps = conn.prepareStatement(sql);
         for(int i=0;i<parameters.length;i++)
         	ps.setString(i+1, parameters[i]);

@@ -1,6 +1,8 @@
-package entities;
+package dbms;
 
 import java.util.List;
+
+import entities.Book;
 
 public interface LibraryDao {
 	
@@ -10,5 +12,5 @@ public interface LibraryDao {
 	boolean newBook(Book b);
 	boolean newGenre(String g);
 	boolean delGenre(String g);
-	boolean setGenre(String t, String g);
+	boolean changeGenre(String t, String g);
 }

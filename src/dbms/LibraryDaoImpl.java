@@ -1,31 +1,30 @@
-package entities;
+package dbms;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import dbms.IDatabase;
-import dbms.MySqlDb;
+import entities.Book;
 import utils.Factory;
+import utils.Log;
 
 public class LibraryDaoImpl implements LibraryDao {
-	
-	MySqlDb db = null;
+
+	private MySqlDb db = null;
 	public LibraryDaoImpl(String address, String schema, String username, String password) {
 		db = (MySqlDb) IDatabase.make(address, schema, username, password);
 	}
-	
+
+	Log logger = Log.getInstance();
+
 	@Override
 	public List<Book> getBooksList() {
 		List<Book> ris = new ArrayList<>();
-		try {
-			for(Map<String,String> bmap : db.fetch("*","books") ) {
-				Book book = Factory.makeBook(bmap);
-				if(book!=null)
-					ris.add(book);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
+		logger.info("Fetching books...");
+		for(Map<String,String> bmap : db.fetch("*","books") ) {
+			Book book = Factory.makeBook(bmap);
+			if(book!=null)
+				ris.add(book);
 		}
 		return ris;
 	}
@@ -33,24 +32,18 @@ public class LibraryDaoImpl implements LibraryDao {
 	@Override
 	public List<String> getGenresList() {
 		List<String> ris = new ArrayList<>();
-		try {
-			for(Map<String,String> gmap : db.fetch("val","genres"))
-				ris.add(gmap.get("val"));
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		logger.info("Fetching genres...");
+		for(Map<String,String> gmap : db.fetch("val","genres"))
+			ris.add(gmap.get("val"));
 		return ris;
 	}
 
 	@Override
 	public List<String> getTitlesList() {
 		List<String> ris = new ArrayList<>();
-		try {
-			for(Map<String,String> gmap : db.fetch("val","genres"))
-				ris.add(gmap.get("val"));
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		logger.info("Fetching titles...");
+		for(Map<String,String> gmap : db.fetch("val","genres"))
+			ris.add(gmap.get("val"));
 		return ris;
 	}
 
@@ -70,7 +63,7 @@ public class LibraryDaoImpl implements LibraryDao {
 	}
 
 	@Override
-	public boolean setGenre(String tit, String gen) {
+	public boolean changeGenre(String tit, String gen) {
 		return db.update("books", "genre", gen, tit);
 	}
 }
