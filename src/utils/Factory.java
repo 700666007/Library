@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.Scanner;
 
 import dbms.IDatabase;
-import dbms.LibraryDao;
-import dbms.LibraryDaoImpl;
 import dbms.MySqlDb;
 import entities.Book;
+import entities.LibraryDao;
+import entities.LibraryDaoImpl;
 
 public abstract class Factory {
 	

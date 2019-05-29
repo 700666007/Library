@@ -11,14 +11,17 @@ public class Log
 	
 	// TODO better with getInstance(Main.class)
 	public synchronized static Log getInstance() {
-		return Log.getInstance(false,false);
+		return Log.getInstance(false,false,null);
 	}
-	public synchronized static Log getInstance(boolean shouldLogDebug, boolean shouldLogData) {
+	public synchronized static Log getInstance(boolean shouldLogDebug, boolean shouldLogData, String filepaf) {
 		if(instance == null) {
 			instance = new Log();
 			debug = shouldLogDebug;
 			data = shouldLogData;
-			filePath = "C:\\Users\\LoneRaven\\Desktop\\logger.txt";
+			if(filepaf != null)
+				filePath = filepaf;
+			else
+				throw new NullPointerException();
 		}
 		return instance;
 	}
@@ -42,6 +45,7 @@ public class Log
 		InOut.printException(e,ex);
 		return _logEvent(s);
 	}
+	// TODO servono?
 	public boolean debug(String e) {
 		if(debug) {
 			String s = LocalDateTime.now()+" [DEBUG] "+e;

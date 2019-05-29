@@ -1,8 +1,6 @@
-package dbms;
+package entities;
 
 import java.util.List;
-
-import entities.Book;
 
 public interface LibraryDao {
 	

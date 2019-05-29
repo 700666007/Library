@@ -8,9 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import utils.Log;
+import utils.MyUtils;
+
 abstract class Database implements IDatabase {
 
 	protected abstract Connection getConn();
+	Log logger = Log.getInstance();
 	
 	@Override
 	public Map<String, String> row(String table, int id) throws Exception {
@@ -19,7 +23,7 @@ abstract class Database implements IDatabase {
 		String query = "SELECT * FROM "+table+" WHERE id = "+id;
 		ResultSet rs = conn.createStatement().executeQuery(query);
         if(rs.next())
-	        for(int i=1;i<=rs.getMetaData().getColumnCount();i++)
+	        for(int i=1; i<=rs.getMetaData().getColumnCount(); i++)
 	        	ris.put (
 	        		rs.getMetaData().getColumnLabel(i), 
 	        		rs.getString(i) 
@@ -36,7 +40,7 @@ abstract class Database implements IDatabase {
         ResultSet rs = conn.createStatement().executeQuery(sql);
 		while(rs.next()) {
 			Map<String,String> row = new LinkedHashMap<String,String>();
-			for(int i=1;i<=rs.getMetaData().getColumnCount();i++)
+			for(int i=1; i<=rs.getMetaData().getColumnCount(); i++)
 		        	row.put (
 		        		rs.getMetaData().getColumnLabel(i), 
 		        		rs.getString(i) 
@@ -52,9 +56,11 @@ abstract class Database implements IDatabase {
 	public List<Map<String, String>> rows(String sql, String[] parameters) throws Exception {
 		List<Map<String,String>> ris = new ArrayList<Map<String,String>>();
         Connection conn = getConn();
+        logger.debug(sql);
         PreparedStatement ps = conn.prepareStatement(sql);
-        for (int i = 0;i < parameters.length;i++)
+        for (int i=0; i<parameters.length; i++)
         	ps.setString(i+1,parameters[i]);
+        logger.debug(ps.toString());
         ResultSet rs = ps.executeQuery();
         while(rs.next())
 		{
@@ -64,6 +70,7 @@ abstract class Database implements IDatabase {
 		        		rs.getMetaData().getColumnLabel(i),
 		        		rs.getString(i)
 		        	);
+			logger.data("Database.rows(): "+MyUtils.renderMap(row));
 			ris.add(row);
 		}
         rs.close();

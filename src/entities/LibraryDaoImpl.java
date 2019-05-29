@@ -1,10 +1,12 @@
-package dbms;
+package entities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import entities.Book;
+import dbms.IDatabase;
+import dbms.MySqlDb;
+import dbms.MySqlDb.Table;
 import utils.Factory;
 import utils.Log;
 
@@ -21,7 +23,7 @@ public class LibraryDaoImpl implements LibraryDao {
 	public List<Book> getBooksList() {
 		List<Book> ris = new ArrayList<>();
 		logger.info("Fetching books...");
-		for(Map<String,String> bmap : db.fetch("*","books") ) {
+		for(Map<String,String> bmap : db.fetch("*",Table.BOOKS) ) {
 			Book book = Factory.makeBook(bmap);
 			if(book!=null)
 				ris.add(book);
@@ -33,7 +35,7 @@ public class LibraryDaoImpl implements LibraryDao {
 	public List<String> getGenresList() {
 		List<String> ris = new ArrayList<>();
 		logger.info("Fetching genres...");
-		for(Map<String,String> gmap : db.fetch("val","genres"))
+		for(Map<String,String> gmap : db.fetch("val",Table.GENRES))
 			ris.add(gmap.get("val"));
 		return ris;
 	}
@@ -42,7 +44,7 @@ public class LibraryDaoImpl implements LibraryDao {
 	public List<String> getTitlesList() {
 		List<String> ris = new ArrayList<>();
 		logger.info("Fetching titles...");
-		for(Map<String,String> gmap : db.fetch("val","genres"))
+		for(Map<String,String> gmap : db.fetch("val",Table.GENRES))
 			ris.add(gmap.get("val"));
 		return ris;
 	}

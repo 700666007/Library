@@ -5,7 +5,7 @@ import java.util.Scanner;
 public abstract class InOut {
 	
 //	// PROPERTIES ==================================================================================================================================
-	private static String marginPattern = ">>>";
+	private static String marginPattern = ">>> ";
 	private static String _addMargin(String s) { return marginPattern+s.replace("\n", "\n"+marginPattern); }
 	
 	// PRINT METHODS =======================================================================================================================
