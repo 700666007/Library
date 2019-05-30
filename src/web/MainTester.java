@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import entities.Book;
-import entities.LibraryDao;
+import entities.ProxyLibrary;
 import utils.Factory;
 import utils.InOut;
 import utils.Log;
@@ -13,15 +13,14 @@ public class MainTester {
 
 	public static void main(String[] args) {
 		
-		Log logger = Log.getInstance(true,true,"");
-		LibraryDao library = Factory.makeLibrary();
+		Log logger = Log.getInstance(true,true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt");
+		ProxyLibrary library = Factory.makeLibrary();
 		Scanner kbd = Factory.makeKbd();
-		String[] options = {
-			"Get books' list", "Add new book", "Add new genre",
-			"Delete genre", "Change book's genre"
-		};
 		
-		int cmd = InOut.selectOption(options, kbd);
+		int cmd = InOut.selectOption(new String[] {
+			"Get books' list", "Add new book", "Add new genre",
+			"Delete genre", "Change book's genre" }, kbd);
+		
 		switch(cmd) {
 			case 1:
 				List<Book> list = library.getBooksList();

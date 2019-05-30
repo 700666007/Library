@@ -1,47 +1,42 @@
 package entities;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class CachedLibrary implements LibraryDao {
+public class ProxyLibrary implements LibraryDao {
 
 	private LibraryDaoImpl real;
-	private Map<String,List<Book>> cache = new HashMap<>();
 	
-	public CachedLibrary(LibraryDaoImpl real) {
+	public ProxyLibrary(LibraryDaoImpl real) {
 		this.real = real;
 	}
 	
 	@Override
 	public List<Book> getBooksList() {
-//		if(!cache.isEmpty())
-//			return storedResult
 		return real.getBooksList();
 	}
 	@Override
 	public List<String> getGenresList() {
-		return null;
+		return real.getGenresList();
 	}
 	@Override
 	public List<String> getTitlesList() {
-		return null;
+		return real.getTitlesList();
 	}
 	@Override
 	public boolean newBook(Book b) {
-		return false;
+		return real.newBook(b);
 	}
 	@Override
 	public boolean newGenre(String g) {
-		return false;
+		return real.newGenre(g);
 	}
 	@Override
 	public boolean delGenre(String g) {
-		return false;
+		return real.delGenre(g);
 	}
 	@Override
 	public boolean changeGenre(String t, String g) {
-		return false;
+		return real.changeGenre(t,g);
 	}
 	
 }

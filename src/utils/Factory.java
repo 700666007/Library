@@ -8,6 +8,7 @@ import dbms.MySqlDb;
 import entities.Book;
 import entities.LibraryDao;
 import entities.LibraryDaoImpl;
+import entities.ProxyLibrary;
 
 public abstract class Factory {
 	
@@ -29,9 +30,14 @@ public abstract class Factory {
 		logger.info("New Book created.");
 		return book;
 	}
-	public static LibraryDao makeLibrary() {
+	private static LibraryDao _makeLibrary() {
 		LibraryDao library = new LibraryDaoImpl("localhost", "library", "root", "toor");
-		logger.info("New LibraryDaoImpl created.");
+		return library;
+	}
+	public static ProxyLibrary makeLibrary() {
+		ProxyLibrary library =
+				new ProxyLibrary((LibraryDaoImpl)_makeLibrary());
+		logger.info("New CachedLibrary created.");
 		return library;
 	}
 	public static Scanner makeKbd() {
