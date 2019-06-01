@@ -10,12 +10,13 @@ import java.util.Map;
 
 import utils.Log;
 import utils.MyUtils;
+import view.IView;
 
 abstract class Database implements IDatabase {
 
 	protected abstract Connection getConn();
 	Log logger = Log.getInstance();
-	/// TODO logdaata
+
 	@Override
 	public Map<String, String> row(String query, String username, char[] password) throws Exception {
 		Map<String,String> ris = new LinkedHashMap<String,String>();
@@ -32,6 +33,7 @@ abstract class Database implements IDatabase {
 	        	);
 		rs.close();
 		conn.close();
+		logger.data(IView.translateLog("ROW"), MyUtils.renderMap(ris));
 		return ris;
 	}
 	
@@ -47,6 +49,7 @@ abstract class Database implements IDatabase {
 		        		rs.getMetaData().getColumnLabel(i), 
 		        		rs.getString(i) 
 		        	);
+			logger.data(IView.translateLog("ROW"),MyUtils.renderMap(row));
 			ris.add(row);
 		}
 		rs.close();
@@ -58,11 +61,9 @@ abstract class Database implements IDatabase {
 	public List<Map<String, String>> rows(String sql, String[] parameters) throws Exception {
 		List<Map<String,String>> ris = new ArrayList<Map<String,String>>();
         Connection conn = getConn();
-        logger.debug(sql);
         PreparedStatement ps = conn.prepareStatement(sql);
         for (int i=0; i<parameters.length; i++)
         	ps.setString(i+1,parameters[i]);
-        logger.debug(ps.toString());
         ResultSet rs = ps.executeQuery();
         while(rs.next())
 		{
@@ -72,7 +73,7 @@ abstract class Database implements IDatabase {
 		        		rs.getMetaData().getColumnLabel(i),
 		        		rs.getString(i)
 		        	);
-			logger.data("Database.rows(): "+MyUtils.renderMap(row));
+			logger.data(IView.translateLog("ROW"),MyUtils.renderMap(row));
 			ris.add(row);
 		}
         rs.close();

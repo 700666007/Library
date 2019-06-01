@@ -3,9 +3,10 @@ package view;
 import java.io.File;
 import java.util.Scanner;
 
-import model.entities.Book;
-
 public class ViewHTML implements IView {
+
+	@Override
+	public String type() { return "HTML"; }
 	
 	private String path;
 	private IView view;
@@ -37,13 +38,5 @@ public class ViewHTML implements IView {
 	@Override
 	public String translate(String code) {
 		return view.translate(code);
-	}
-
-	@Override
-	public String render(Book b) {
-		String html = "<tr style='text-align: center'>";
-		for(String key : new String[] {"title","author","genre","path"})
-			html += "<td>"+b.toMap().get(key)+"</td>";
-		return html+"</tr>";
 	}
 }

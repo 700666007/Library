@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import model.entities.LibraryDaoImpl.SCHEMA_TOKEN;
 import utils.Log;
 import utils.MyUtils;
+import view.IView;
 
 public class MySqlDb extends Database implements IDatabase {
 	
@@ -20,10 +22,9 @@ public class MySqlDb extends Database implements IDatabase {
 		_setPath(_buildPath(address,schema,username,password));
 	}
 	private String _buildPath(String address, String schemaName, String username, String password) {
-		return "jdbc:mysql://" + address + "/" + schemaName +
-				"?user=" + username + "&password=" + password +
-				"&useUnicode=true" +
-				"&serverTimezone=UTC" +
+		return "jdbc:mysql://"+address+"/"+schemaName+
+				"?user="+username+"&password="+password +
+				"&useUnicode=true" + "&serverTimezone=UTC" +
 				"&useLegacyDatetimeCode=false" +
 				"&useJDBCCompliantTimezoneShift=true";
 	}
@@ -33,53 +34,62 @@ public class MySqlDb extends Database implements IDatabase {
 	
 	// CONNECTION ==================================================================================================================================
 	protected Connection getConn() {
-		logger.info("Connecting to database...");
+		logger.info(IView.translateLog("CONN"));
 		Connection conn = null;
 		try {
 			Class.forName(DRIVER_NAME);
 			conn = DriverManager.getConnection(path);
-			logger.info("Connection established!");
+			logger.info(IView.translateLog("SUX_CONN"));
 		} catch(Exception e) {
-			logger.error("Couldn't connect to database..",e);
+			logger.error(IView.translateLog("ERR_CONN"),e);
 		}
 		return conn;
 	}
 
-	public enum Table { BOOKS, GENRES, USERS }
+	// TODO implement it ffs
 	
 	// FETCH, DELETE, INSERT, UPDATE ==================================================================================================================================
 	public Map<String,String> fetchUser(String username, char[] password) {
 		try {
 			return row("SELECT * FROM users WHERE username = ? AND password = ?",username,password);
 		} catch(Exception e) {
-			logger.error("Operation (FETCH_USER) failed.", e);
+			logger.error(IView.translateLog("ERR_FETCH"), e);
 		}
 		return null; 
 	}
-	public List<Map<String,String>> fetch(String content, Table table, String orderBy) {
+	public List<Map<String,String>> fetchAll(SCHEMA_TOKEN table) {
+		try {
+			return rows("SELECT * FROM "+table);
+		} catch(Exception e) {
+			logger.error(IView.translateLog("ERR_FETCH"), e);
+		}
+		return null; 
+	}
+	public List<Map<String,String>> fetch(SCHEMA_TOKEN content, SCHEMA_TOKEN table, SCHEMA_TOKEN orderBy) {
 		try {
 			return rows("SELECT "+content+" FROM "+table+(
 					orderBy!=null?" ORDER BY "+orderBy:"")
 			);
 		} catch(Exception e) {
-			logger.error("Operation (FETCH) failed.",e);
+			logger.error(IView.translateLog("ERR_FETCH"),e);
 		}
 		return new ArrayList<Map<String,String>>();
 	}
-	public boolean delete(String table, String key, String value) {
+	public boolean delete(SCHEMA_TOKEN table, SCHEMA_TOKEN key, String value) {
 		try {
 			if( execute(
 					"DELETE FROM "+table+" WHERE "+key+" = ?",
 					new String[] {value} )
 			)
+				// TRANSALTE THIS TODO
 				logger.info("Deleted '"+key+":"+value+" from '"+table+"'");
 			return true;
 		} catch(Exception e) {
-			logger.error("Operation (DELETE) failed.",e);
+			logger.error(IView.translateLog("ERR_DEL"),e);
 		}
 		return false;
 	}
-	public boolean insert(String table, String column, String value) {
+	public boolean insert(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String value) {
 		try {
 			if( execute(
 					"INSERT INTO "+table+"("+column+") VALUES (?)",
@@ -88,11 +98,11 @@ public class MySqlDb extends Database implements IDatabase {
 				logger.info("Inserted into '"+table+"' value "+value);
 			return true;
 		} catch(Exception e) {
-			logger.error("Operation (INSERT) failed.",e);
+			logger.error(IView.translateLog("ERR_INS"),e);
 		}
 		return false;
 	}
-	public boolean insert(String table, Map<String,String> map) {
+	public boolean insert(SCHEMA_TOKEN table, Map<String,String> map) {
 		try {
 			int size = map.size();
 			String query = "INSERT INTO "+table+
@@ -103,18 +113,18 @@ public class MySqlDb extends Database implements IDatabase {
 				logger.info("Inserted into '"+table+"' value "+MyUtils.renderMap(map));
 			return true;
 		} catch(Exception e) {
-			logger.error("Operation (INSERT) failed.",e);
+			logger.error(IView.translateLog("ERR_INS"),e);
 		}
 		return false;
 	}
-	public boolean update(String table, String column, String newValue, String id) {
-		try {								// TODO dovrebbe essere id non title
+	public boolean update(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String newValue, String title) {
+		try {								
 			if(execute("UPDATE "+table+" SET "+column+" = ? WHERE title = ?",
-					new String[] {newValue,id} ))
-				logger.info("Updated '"+table+"': '"+column+"' of element "+id+" set to '"+newValue+"'");
+					new String[] {newValue.toString(),title} ))
+				logger.info("Updated '"+table+"': '"+column+"' of "+title+" set to '"+newValue+"'");
 			return true;
 		} catch(Exception e) {
-			logger.error("Operation (UPDATE) failed.",e);
+			logger.error(IView.translateLog("ERR_UPD"),e);
 		}
 		return false;
 	}

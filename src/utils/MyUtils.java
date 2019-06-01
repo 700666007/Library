@@ -13,6 +13,8 @@ import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
 
+import view.IView;
+
 public abstract class MyUtils {
 
 	static Log logger = Log.getInstance();
@@ -41,33 +43,36 @@ public abstract class MyUtils {
 			joiner.add("\n  "+entry.getKey()+":"+entry.getValue());
 		return "{"+joiner.toString()+"\n}";
 	}
-	static boolean createLogFile(String path) {
+	static boolean createFile(String path) {
 		try {
 			File file = new File(path);
 			if(file.exists())
-				logger.info("File "+path+" already exists.");
+				logger.info("File " + path +
+						IView.translateLog("FILE_EXISTS"));
 			else if(file.createNewFile())
-				logger.info("File "+path+" successfully created.");
+				logger.info("File " + path +
+						IView.translateLog("FILE_CREATED"));
 			else {
-				logger.info("File "+path+" cannot be created.");
+				logger.info("File " + path +
+						IView.translateLog("FILE_NOT_CREATED"));
 				return false;
 			}
 		} catch(IOException e) {
-			InOut.printException("File creation failed.",e);
+			InOut.printException(IView.translateLog("ERR_FILE_CREATION"),e);
 			return false;
 		}
 		return true;
 	}
 	static boolean write(String path, String str) {
 		try {
-			FileWriter fw = new FileWriter(new File(path));
+			FileWriter fw = new FileWriter(new File(path), true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write(str);
 			bw.flush();
 			bw.close();
 			return true;
 		} catch(IOException e) {
-			logger.error("Couldn't write to file..", e);
+			logger.error("ERR_FILE_WRITING", e);
 			return false;
 		}
 	}

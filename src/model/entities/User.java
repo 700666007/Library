@@ -11,9 +11,9 @@ public class User {
 		this.language = language;
 	}
 
-	public String getUsername() { return username; }
+	public String name() { return username; }
 	public int isAdmin() 	{ return isAdmin;  }
-	public String getLanguage() { return language; }
+	public String lang() { return language; }
 	
 	public void setUsername(String username) { this.username = username; }
 	public void setLanguage(String language) { this.language = language; }

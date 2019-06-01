@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.entities.ProxyLibrary;
 import model.entities.User;
 import utils.Log;
+import view.IView;
 
 //import com.google.gson.Gson;
 //import com.google.gson.JsonArray;
@@ -26,7 +27,7 @@ public class Controller {
 		
     	Map<String, Integer> rights 
     			= new HashMap<String,Integer>();
-    	rights.put("newBook", 0/*TODO change to 1*/);
+    	rights.put("newBook", 1);
     	rights.put("newGenre", 1);
     	rights.put("delGenre", 1);
     	rights.put("setGenre", 1);
@@ -41,7 +42,7 @@ public class Controller {
     		action = "404";
     	else if(level < rights.get(action))
     		action = "403";
-    	logger.data("Action: "+action);
+    	logger.data(IView.translateLog("ACTION"),action);
     	return action;
 	}
 	static User login(String username, String password, ProxyLibrary library) {
@@ -51,21 +52,21 @@ public class Controller {
 			if((u = library.getUser(username,pwd)) == null)
 				throw new NullPointerException();
 		} catch(Exception e) {
-			logger.info("Invalid credentials.");
+			logger.info(IView.translateLog("LOGIN_FAILED"));
 			return u;
 		}
-		logger.info("Successfully logged in.");
+		logger.info(IView.translateLog("LOGIN_SUCCESS"));
 		return u;
 	}
 	static int setUserLvl(HttpServletRequest req) {
-		int level = 0;
+		Integer level = 0;
 		try {
 			level = Integer.parseInt(req.getSession()
 					.getAttribute("level").toString());
 		} catch(Exception e) {
 			level = 0;
 		}
-		logger.data("User lvl: "+level);
+		logger.data(IView.translateLog("USR_LVL"),level.toString());
 		return level;
 	}
 //	static JsonArray jsonResponse(ProxyLibrary library) {

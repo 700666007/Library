@@ -7,8 +7,8 @@ import utils.Factory;
 
 public interface IDatabase {
 
-	static IDatabase make(String address, String schema, String username, String password) {
-		return Factory.makeDb(address, schema, username, password);
+	static IDatabase make(String... params) {
+		return Factory.makeDb(params[0], params[1], params[2], params[3]);
 	}
 	Map<String,String> row(String table, String username, char[] password) throws Exception;
 	List<Map<String,String>> rows(String sql) throws Exception;

@@ -32,9 +32,9 @@ public class Index extends HttpServlet {
 	private IView view;
 	
     public Index()  {
+    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates");
     	logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
     	logger.info("APPLICATION STARTED");
-    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates");
     	logger.debug("View created");
     	library = Factory.makeLibrary("localhost","mylibrary","root","toor");
     	logger.debug("Library created");
@@ -65,17 +65,19 @@ public class Index extends HttpServlet {
 				case "logout":	
 					request.getSession().invalidate();	
 					level = 0;
-					logger.info("Successfully logged out.");
+					logger.info("LOGOUT");
 					break;
 				case "login"   :
-					logger.data("Username: "+pmap.get("username"));
-					logger.data("Password: "+pmap.get("password"));
+					logger.data(IView.translateLog("USRNM"),pmap.get("username"));
+					logger.data(IView.translateLog("PSWD"),pmap.get("password"));
 					User user = Controller.login(
 							pmap.get("username"),pmap.get("password"),library
 					);
 					if(user!=null) {
-						request.getSession().setAttribute("username", user.getUsername());
+						request.getSession().setAttribute("username", user.name());
 						request.getSession().setAttribute("level", user.isAdmin());
+						// TODO UI language
+						request.getSession().setAttribute("lang", user.lang());
 						level = 1;
 					} else
 						body = view.fileContent("forms\\loginKO")+body;
@@ -85,7 +87,7 @@ public class Index extends HttpServlet {
 		body = view.renderBody(level,body,library);
 		PrintWriter pw = response.getWriter();
 		pw.append(header+body+view.fileContent("footer"));
-		logger.info("Response printed.");
+		logger.info("PRINT_RESP");
 		
 //		response.setContentType("application/json");
 //		pw.print(Controller.jsonResponse(library));

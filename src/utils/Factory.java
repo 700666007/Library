@@ -13,30 +13,30 @@ import model.entities.User;
 import view.IView;
 import view.ViewENG;
 import view.ViewHTML;
+import view.ViewITA;
 
 public abstract class Factory {
 	
 	static Log logger = Log.getInstance();
-	// TODO check access modifiers
-	private static LibraryDao _makeLibrary(String... params) {
+	// TODO check access modifiers, useless methods, unnecessary parameters
+	private static LibraryDao _libraryImpl(String... params) {
 		LibraryDao library = new LibraryDaoImpl(params[0], params[1], params[2], params[3]);
 		return library;
 	}
 	public static ProxyLibrary makeLibrary(String dbAddress, String schemaName, String username, String password) {
 		ProxyLibrary library =
-				new ProxyLibrary((LibraryDaoImpl)_makeLibrary(dbAddress, schemaName, username, password));
-		logger.info("Factory: New ProxyLibrary created.");
+				new ProxyLibrary((LibraryDaoImpl)_libraryImpl(dbAddress, schemaName, username, password));
+		logger.info(IView.translateLog("FACTORY_LIB"));
 		return library;
 	}
-	public static IDatabase makeDb(String dbAddress, String schemaName, String username, String password) {
-		MySqlDb mysqldb = new MySqlDb(dbAddress, schemaName, username, password);
-		logger.info("Factory: New MySQLDB created.");
+	public static IDatabase makeDb(String... params) {
+		MySqlDb mysqldb = new MySqlDb(params[0], params[1], params[2], params[3]);
+		logger.info(IView.translateLog("FACTORY_DB"));
 		return mysqldb;
 	}
-	
-	public static Scanner makeKbd() {
+	public static Scanner makeKbd(IView view) {
 		Scanner kbd = new Scanner(System.in);
-		logger.debug("Factory: New Scanner created.");
+		logger.debug(IView.translateLog("FACTORY_SCAN"));
 		return kbd;
 	}
 	public static Book makeBook(Map<String,String> bmap) {
@@ -50,29 +50,21 @@ public abstract class Factory {
 				Integer.parseInt(umap.get("isAdmin")),
 				umap.get("lang")
 		);
-		logger.debug("Factory: New User created.");
+		logger.debug(IView.translateLog("FACTORY_USER"));
 		return user;
 	}
-	public static IView makeView(String path) {
-		IView v = new ViewHTML(path,new ViewENG());
-		logger.debug("Factory: New View created.");
+	public static IView makeView(String path, String lang) {
+		IView v = new ViewHTML(path,makeView(lang));
+		logger.debug(IView.translateLog("FACTORY_VIEW"));
 		return v;
 	}
-	// TODO ma tutte ste view servono??
-//	public static IView makeView() {
-//		return makeView("HTML");
-//	}
-//	public static IView makeView(String type) {
-//		IView ris = null;
-//		
-//		switch(type) {
-//			case "HTML":
-//				ris = new ViewHTML("");
-//				break;
-//			default:
-//				ris = new ViewENG();
-//		}
-//		
-//		return ris;
-//	}
+	public static IView makeView(String type) {
+		IView ris = null;
+		switch(type) {
+			case "ENG": ris = new ViewENG(); break;
+			case "ITA": ris = new ViewITA(); break;
+			default:	ris = new ViewENG();
+		}
+		return ris;
+	}
 }

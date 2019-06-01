@@ -1,18 +1,51 @@
 package view;
 
+import java.io.File;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 
 import model.entities.Book;
 import model.entities.LibraryDao;
+import utils.Factory;
 
 public interface IView {
-	
-	String render(Book b);
+
+	String type();
 	String translate(String code);
-	String fileContent(String path);
 	
+	static String translateLang(String code, String lang) {
+		return Factory.makeView(lang).translate(code);
+	}
+	static String translateLog(String code) {
+		return translateLang(code,"ENG");
+	}
+	
+	default String fileContent(String path) {
+		String ris = "";
+		Scanner rows = null;
+		try {
+			rows = new Scanner(new File(path));
+			while(rows.hasNextLine())
+				ris+=rows.nextLine()+"\n";
+		} catch(Exception e) {
+			ris = e.getMessage();
+		} finally {
+			try {
+				rows.close();
+			} catch(NullPointerException n) {
+				n.printStackTrace();
+			}
+		}
+		return ris;
+	}
+	default String render(Book b) {
+		String html = "<tr style='text-align: center'>";
+		for(String key : new String[] {"title","author","genre","path"})
+			html += "<td>"+b.toMap().get(key)+"</td>";
+		return html+"</tr>";
+	}
 	default String render(List<Book> books) {
 		String ris = "";
 		for(Book b : books)

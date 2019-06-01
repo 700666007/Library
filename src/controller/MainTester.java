@@ -10,47 +10,51 @@ import model.entities.ProxyLibrary;
 import utils.Factory;
 import utils.InOut;
 import utils.Log;
+import view.IView;
 
 public class MainTester {
 
 	public static void main(String[] args) {
-		
-		Log logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt");
+
+		String type = "ITA";
+		IView view = Factory.makeView(type);
+		Scanner kbd = Factory.makeKbd(view);
+		Log logger = Log.getInstance(
+			true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt"
+		);
 		ProxyLibrary library = Factory.makeLibrary("localhost","library","root","toor");
-		Scanner kbd = Factory.makeKbd();
-		
 		int cmd = InOut.selectOption(new String[] {
-			"Get books' list", "Add new book", "Add new genre",
-			"Delete genre", "Change book's genre" }, kbd);
-		
+				"OPT_BOOKS_LIST", "OPT_NEW_BOOK", "OPT_NEW_GENRE",
+				"OPT_DEL_GENRE", "OPT_UPD_BOOK_GENRE" }, kbd);
 		switch(cmd) {
 			case 1:
 				List<Book> list = library.getBooksList();
 				for(Book book : list)
-					logger.data(book.toString());
+					logger.data("",book.map2Str());
 				break;
 			case 2:
 				Map<String,String> bmap = new HashMap<>();
-				bmap.put("title" , InOut.getStr("Creating new book:\nInsert title:", kbd));
-				bmap.put("author", InOut.getStr("Insert author:", kbd));
-				bmap.put("genre" , InOut.getStr("Insert genre:", kbd));
-				bmap.put("path"  , InOut.getStr("Insert path:", kbd));
+				logger.info(IView.translateLang("NEW_BOOK",view.type()));
+				bmap.put("title" , InOut.getStr(IView.translateLang("INSERT_TITLE",view.type()), kbd));
+				bmap.put("author", InOut.getStr(IView.translateLang("INSERT_AUTHOR",view.type()), kbd));
+				bmap.put("genre" , InOut.getStr(IView.translateLang("INSERT_GENRE",view.type()), kbd));
+				bmap.put("path"  , InOut.getStr(IView.translateLang("INSERT_PATH",view.type()), kbd));
 				library.newBook(Factory.makeBook(bmap));
 				break;
 			case 3:
 				library.newGenre(
-					InOut.getStr("Insert new genre:", kbd)
+					InOut.getStr(IView.translateLang("NEW_GENRE",view.type()), kbd)
 				);
 				break;
 			case 4:
 				library.delGenre(
-					InOut.getStr("Insert new genre:", kbd)
+					InOut.getStr(IView.translateLang("NEW_GENRE",view.type()), kbd)
 				);
 				break;
 			case 5:
 				library.changeGenre(
-					InOut.getStr("Insert book's title:", kbd),
-					InOut.getStr("Insert new genre:", kbd)
+					InOut.getStr(IView.translateLang("INSERT_TITLE",view.type()), kbd),
+					InOut.getStr(IView.translateLang("NEW_GENRE",view.type()), kbd)
 				);
 				break;
 		}

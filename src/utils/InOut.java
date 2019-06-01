@@ -2,18 +2,18 @@ package utils;
 
 import java.util.Scanner;
 
+import view.IView;
+
 public abstract class InOut {
 	
-//	// PROPERTIES ==================================================================================================================================
 	private static String marginPattern = ">>> ";
 	private static String _addMargin(String s) { return marginPattern+s.replace("\n", "\n"+marginPattern); }
 	
-	// PRINT METHODS =======================================================================================================================
 	static void print(String text) {
 		System.out.println(_addMargin(text));
 	}
 	static void printException(String message, Exception e) {
-		print(message+" Reason:");
+		System.out.println(message + IView.translateLog("REASON"));
 		e.printStackTrace();
 	}
 	public static String getStr(String message, Scanner kbd) { 
@@ -23,21 +23,21 @@ public abstract class InOut {
 	private static int _getInt(String message, Scanner kbd) {
 		while(true)
 			try { return Integer.parseInt(getStr(message, kbd)); }
-			catch(NumberFormatException e) { print("Not a number!"); }
+			catch(NumberFormatException e) { IView.translateLog("NOT_A_NUMBER"); }
 	}
 	private static int _getInt1toInf(String message, Scanner kbd) {
 		int input = 0;
 		while((input = _getInt(message, kbd))<1)
-			print("Not greater than 0!");
+			IView.translateLog("NOT_GT_THAN_0");
 		return input;
 	}
 	public static int selectOption(String[] options, Scanner kbd) {
-		String menu = "Select option:\n";
+		String menu = IView.translateLog("OPT_SELECT");
 		for(Integer i=1; i<=options.length; i++)
-			menu+=i+") "+options[i-1]+"\n";
+			menu+=i+") "+IView.translateLog(options[i-1])+"\n";
 		int input = -1;
 		while((input = _getInt1toInf(menu, kbd)) > options.length)
-			print("Invalid option!");
+			IView.translateLog("OPT_NOT_VALID");
 		return input;
 	}
 }

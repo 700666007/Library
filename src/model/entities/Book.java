@@ -38,7 +38,7 @@ public class Book {
 		return map;
 	}
     */
-	public String toString() {
+	public String map2Str() {
 		return MyUtils.renderMap(toMap());
 	}
 	private void setTitle(String title) { this.title = title; }
