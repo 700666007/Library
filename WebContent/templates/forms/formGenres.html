@@ -1,0 +1,21 @@
+<div class="formWrapper">
+	<form class="inline paddBott" accept-charset="UTF-8" method="POST">
+   		<input type="hidden" name="action" value="newGenre" />
+   		<input type="submit" value="Aggiungi" />
+   		<!-- <input type="button" value="Aggiungi" class="submitButton" /> -->
+   		<input type="text" name="val" placeholder="nuovo genere..." />
+   	</form>
+   	<form class="inline shiftRight paddBott" accept-charset="UTF-8" method="POST">
+   		<input type="hidden" name="action" value="delGenre" />
+   		<input type="submit" value="Rimuovi" />
+   		<!-- <input type="button" value="Rimuovi" class="submitButton" /> -->
+   		<select name="val" class="genresSelect"><!-- GENRES --></select>
+   	</form>
+</div>
+<form class="centered paddBott" accept-charset="UTF-8" method="POST">
+	<input type="hidden" name="action" value="setGenre" />
+   		<input type="submit" value="Modifica" />
+	<!-- <input type="button" value="Modifica" class="submitButton" /> -->
+	<select name="tit" class="titlesSelect"><!-- TITLES --></select>
+	<select name="gen" class="genresSelect"><!-- GENRES --></select>
+</form>
