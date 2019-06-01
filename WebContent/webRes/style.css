@@ -20,11 +20,10 @@ TABLE
 }
 TD { padding: 5px; }
 TH { font-size: 25px; }
-FORM { padding-bottom: 20px; }
+.paddBott { padding-bottom: 20px; }
 .inline { display: inline-block; }
 .centered { text-align: center; }
 .shiftRight { margin-left: 7.5%; }
-.white { color: white; }
-#search { margin-left: 5%; }
+.pointer { cursor: pointer; }
 .formWrapper { text-align: center; padding-left: 15%; padding-right: 15%; }
-#welcome { cursor: pointer; }
+#search { margin-left: 5%; }
