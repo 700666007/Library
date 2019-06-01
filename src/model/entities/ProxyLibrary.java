@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ProxyLibrary implements LibraryDao {
 
+	//TODO load from here not db
 	private LibraryDaoImpl real;
 	public ProxyLibrary(LibraryDaoImpl real) { this.real = real; }
 	

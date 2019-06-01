@@ -92,8 +92,6 @@ abstract class Database implements IDatabase {
 	@Override
 	public boolean execute(String sql, String[] parameters) throws Exception {
 		Connection conn = getConn();
-		System.out.println(sql);
-		System.out.println(parameters[0]+" "+parameters[1]+" "+parameters[2]+" "+parameters[3]);
 		PreparedStatement ps = conn.prepareStatement(sql);
         for(int i=0;i<parameters.length;i++)
         	ps.setString(i+1, parameters[i]);
