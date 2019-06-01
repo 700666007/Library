@@ -22,7 +22,7 @@ public class MainTester {
 		Log logger = Log.getInstance(
 			true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt"
 		);
-		ProxyLibrary library = Factory.makeLibrary("localhost","library","root","toor");
+		ProxyLibrary library = Factory.makeLibrary("mysql","localhost","library","root","toor");
 		int cmd = InOut.selectOption(new String[] {
 				"OPT_BOOKS_LIST", "OPT_NEW_BOOK", "OPT_NEW_GENRE",
 				"OPT_DEL_GENRE", "OPT_UPD_BOOK_GENRE" }, kbd);

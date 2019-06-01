@@ -4,7 +4,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 import model.dbms.IDatabase;
-import model.dbms.MySqlDb;
+import model.dbms.impl.MySqlDb;
+import model.dbms.impl.OracleDb;
 import model.entities.Book;
 import model.entities.LibraryDao;
 import model.entities.LibraryDaoImpl;
@@ -20,19 +21,27 @@ public abstract class Factory {
 	static Log logger = Log.getInstance();
 	// TODO check access modifiers, useless methods, unnecessary parameters
 	private static LibraryDao _libraryImpl(String... params) {
-		LibraryDao library = new LibraryDaoImpl(params[0], params[1], params[2], params[3]);
+		LibraryDao library = new LibraryDaoImpl(params[0], params[1], params[2], params[3], params[4]);
 		return library;
 	}
-	public static ProxyLibrary makeLibrary(String dbAddress, String schemaName, String username, String password) {
+	public static ProxyLibrary makeLibrary(String type, String dbAddress, String schemaName, String username, String password) {
 		ProxyLibrary library =
-				new ProxyLibrary((LibraryDaoImpl)_libraryImpl(dbAddress, schemaName, username, password));
+				new ProxyLibrary((LibraryDaoImpl)_libraryImpl(type, dbAddress, schemaName, username, password));
 		logger.info(IView.translateLog("FACTORY_LIB"));
 		return library;
 	}
 	public static IDatabase makeDb(String... params) {
-		MySqlDb mysqldb = new MySqlDb(params[0], params[1], params[2], params[3]);
+		IDatabase db = null;
+		switch(params[0]) {
+			case "oracle":
+				db = new OracleDb();
+				break;
+			case "mysql":
+			default:
+				db = new MySqlDb(params[1], params[2], params[3], params[4]);
+		}
 		logger.info(IView.translateLog("FACTORY_DB"));
-		return mysqldb;
+		return db;
 	}
 	public static Scanner makeKbd(IView view) {
 		Scanner kbd = new Scanner(System.in);

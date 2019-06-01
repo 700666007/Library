@@ -1,4 +1,4 @@
-package model.dbms;
+package model.dbms.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import model.dbms.Database;
+import model.dbms.IDatabase;
 import model.entities.LibraryDaoImpl.SCHEMA_TOKEN;
 import utils.Log;
 import utils.MyUtils;
 import view.IView;
 
-public class MySqlDb extends Database implements IDatabase {
+public class MySqlDb extends Database implements IDatabase, IDBActions {
 	
 	// PROPERTIES ==================================================================================================================================
 	private final String DRIVER_NAME = "com.mysql.jdbc.Driver";
@@ -46,9 +48,8 @@ public class MySqlDb extends Database implements IDatabase {
 		return conn;
 	}
 
-	// TODO implement it ffs
-	
 	// FETCH, DELETE, INSERT, UPDATE ==================================================================================================================================
+	@Override
 	public Map<String,String> fetchUser(String username, char[] password) {
 		try {
 			return row("SELECT * FROM users WHERE username = ? AND password = ?",username,password);
@@ -57,6 +58,7 @@ public class MySqlDb extends Database implements IDatabase {
 		}
 		return null; 
 	}
+	@Override
 	public List<Map<String,String>> fetchAll(SCHEMA_TOKEN table) {
 		try {
 			return rows("SELECT * FROM "+table);
@@ -65,6 +67,7 @@ public class MySqlDb extends Database implements IDatabase {
 		}
 		return null; 
 	}
+	@Override
 	public List<Map<String,String>> fetch(SCHEMA_TOKEN content, SCHEMA_TOKEN table, SCHEMA_TOKEN orderBy) {
 		try {
 			return rows("SELECT "+content+" FROM "+table+(
@@ -75,6 +78,7 @@ public class MySqlDb extends Database implements IDatabase {
 		}
 		return new ArrayList<Map<String,String>>();
 	}
+	@Override
 	public boolean delete(SCHEMA_TOKEN table, SCHEMA_TOKEN key, String value) {
 		try {
 			if( execute(
@@ -82,26 +86,30 @@ public class MySqlDb extends Database implements IDatabase {
 					new String[] {value} )
 			)
 				// TRANSALTE THIS TODO
-				logger.info("Deleted '"+key+":"+value+" from '"+table+"'");
+				logger.info(IView.translateLog("SUX_DEL")+key+":"+
+							value+IView.translateLog("TOK_FROM")+table+"'");
 			return true;
 		} catch(Exception e) {
 			logger.error(IView.translateLog("ERR_DEL"),e);
 		}
 		return false;
 	}
+	@Override
 	public boolean insert(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String value) {
 		try {
 			if( execute(
 					"INSERT INTO "+table+"("+column+") VALUES (?)",
 					new String[] {value} )
 			)
-				logger.info("Inserted into '"+table+"' value "+value);
+				logger.info(IView.translateLog("SUX_INS")+table+
+							IView.translateLog("TOK_VAL")+value);
 			return true;
 		} catch(Exception e) {
 			logger.error(IView.translateLog("ERR_INS"),e);
 		}
 		return false;
 	}
+	@Override
 	public boolean insert(SCHEMA_TOKEN table, Map<String,String> map) {
 		try {
 			int size = map.size();
@@ -110,18 +118,23 @@ public class MySqlDb extends Database implements IDatabase {
 					") VALUES ("+MyUtils.commaSepQuestionMarks(size)+")";
 			String[] params = map.values().toArray(new String[size]);
 			if( execute(query,params) )
-				logger.info("Inserted into '"+table+"' value "+MyUtils.renderMap(map));
+				logger.info(IView.translateLog("SUX_INS")+table+
+						    IView.translateLog("TOK_VAL")+
+							MyUtils.renderMap(map));
 			return true;
 		} catch(Exception e) {
 			logger.error(IView.translateLog("ERR_INS"),e);
 		}
 		return false;
 	}
+	@Override
 	public boolean update(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String newValue, String title) {
 		try {								
 			if(execute("UPDATE "+table+" SET "+column+" = ? WHERE title = ?",
 					new String[] {newValue.toString(),title} ))
-				logger.info("Updated '"+table+"': '"+column+"' of "+title+" set to '"+newValue+"'");
+				logger.info(IView.translateLog("SUX_UPD")+table+"': '"+
+							column+IView.translateLog("TOK_OF")+title+
+							IView.translateLog("TOK_SET")+newValue+"'");
 			return true;
 		} catch(Exception e) {
 			logger.error(IView.translateLog("ERR_UPD"),e);

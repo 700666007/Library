@@ -6,9 +6,8 @@ import java.util.Map;
 import utils.Factory;
 
 public interface IDatabase {
-
 	static IDatabase make(String... params) {
-		return Factory.makeDb(params[0], params[1], params[2], params[3]);
+		return Factory.makeDb(params[0], params[1], params[2], params[3], params[4]);
 	}
 	Map<String,String> row(String table, String username, char[] password) throws Exception;
 	List<Map<String,String>> rows(String sql) throws Exception;

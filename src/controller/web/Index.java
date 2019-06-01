@@ -36,7 +36,7 @@ public class Index extends HttpServlet {
     	logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
     	logger.info("APPLICATION STARTED");
     	logger.debug("View created");
-    	library = Factory.makeLibrary("localhost","mylibrary","root","toor");
+    	library = Factory.makeLibrary("mysql","localhost","mylibrary","root","toor");
     	logger.debug("Library created");
     }
     
@@ -48,6 +48,7 @@ public class Index extends HttpServlet {
 		int level = Controller.setUserLvl(request);
 		Map<String,String> pmap = MyUtils.request2map(request);
 		String action = Controller.validate(level, pmap.remove("action"));
+		
 		String header = "";
 		String body = view.fileContent("body");
 		if(action!=null)

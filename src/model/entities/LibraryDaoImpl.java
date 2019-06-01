@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.dbms.IDatabase;
-import model.dbms.MySqlDb;
+import model.dbms.impl.MySqlDb;
 import utils.Factory;
 import utils.Log;
 import view.IView;
@@ -14,7 +14,7 @@ public class LibraryDaoImpl implements LibraryDao {
 
 	private MySqlDb db = null;
 	public LibraryDaoImpl(String... params) {
-		db = (MySqlDb) IDatabase.make(params[0], params[1], params[2], params[3]);
+		db = (MySqlDb) IDatabase.make(params[0], params[1], params[2], params[3], params[4]);
 	}
 
 	Log logger = Log.getInstance();

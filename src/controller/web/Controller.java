@@ -19,9 +19,9 @@ import view.IView;
 //import model.entities.Book;
 //import model.entities.ProxyLibrary;
 
-public class Controller {
+class Controller {
 	
-	static Log logger = Log.getInstance();
+	private static Log logger = Log.getInstance();
 	
 	static String validate(int level, String action) {
 		

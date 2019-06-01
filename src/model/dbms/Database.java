@@ -12,10 +12,10 @@ import utils.Log;
 import utils.MyUtils;
 import view.IView;
 
-abstract class Database implements IDatabase {
+public abstract class Database implements IDatabase {
 
 	protected abstract Connection getConn();
-	Log logger = Log.getInstance();
+	private Log logger = Log.getInstance();
 
 	@Override
 	public Map<String, String> row(String query, String username, char[] password) throws Exception {

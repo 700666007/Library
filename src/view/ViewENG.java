@@ -28,9 +28,16 @@ public class ViewENG implements IView {
 		sentences.put("ERR_CONN", "Couldn't connect to database...");
 		sentences.put("ERR_FETCH_USER", "Operation (FETCH_USER) failed.");
 		sentences.put("ERR_FETCH", "Operation (FETCH) failed.");
+		sentences.put("SUX_DEL", "Deleted '");
 		sentences.put("ERR_DEL", "Operation (DELETE) failed.");
+		sentences.put("SUX_INS", "Inserted into '");
 		sentences.put("ERR_INS", "Operation (INSERT) failed.");
+		sentences.put("SUX_UPD", "Updated '");
 		sentences.put("ERR_UPD", "Operation (UPDATE) failed.");
+		sentences.put("TOK_VAL", "' value ");
+		sentences.put("TOK_FROM", " from '");
+		sentences.put("TOK_OF", "' of ");
+		sentences.put("TOK_SET", " set to '");
 		
 		// Error codes
 		sentences.put("REASON", 			" Reason: \n");
