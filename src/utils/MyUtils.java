@@ -6,9 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+
+import javax.servlet.http.HttpServletRequest;
 
 public abstract class MyUtils {
 
@@ -17,6 +20,12 @@ public abstract class MyUtils {
 		StringJoiner joiner = new StringJoiner(",");
 		for (T t : list)
 			joiner.add(t.toString());
+		return joiner.toString();
+	}
+	public static <T> String commaSepQuestionMarks(int n) {
+		StringJoiner joiner = new StringJoiner(",");
+		for (int i=0; i<n ; i++)
+			joiner.add("?");
 		return joiner.toString();
 	}
 	public static List<String> set2list(Collection<String> set) {
@@ -28,24 +37,26 @@ public abstract class MyUtils {
 		if(map == null || map.size() == 0)
 			return "{}";
 		StringJoiner joiner = new StringJoiner(",");
-		for (String key : map.keySet())
-			joiner.add("\n  "+key+":"+map.get(key));
+		for(Map.Entry<String,String> entry : map.entrySet())
+			joiner.add("\n  "+entry.getKey()+":"+entry.getValue());
 		return "{"+joiner.toString()+"\n}";
 	}
-	static File createNewFile(String path) {
+	static boolean createLogFile(String path) {
 		try {
 			File file = new File(path);
 			if(file.exists())
 				logger.info("File "+path+" already exists.");
 			else if(file.createNewFile())
 				logger.info("File "+path+" successfully created.");
-			else
+			else {
 				logger.info("File "+path+" cannot be created.");
-			return file;
+				return false;
+			}
 		} catch(IOException e) {
-			logger.error("File creation failed.",e);
-			return null;
+			InOut.printException("File creation failed.",e);
+			return false;
 		}
+		return true;
 	}
 	static boolean write(String path, String str) {
 		try {
@@ -59,5 +70,11 @@ public abstract class MyUtils {
 			logger.error("Couldn't write to file..", e);
 			return false;
 		}
+	}
+	public static Map<String,String> request2map(HttpServletRequest req) {
+		Map<String,String> pmap = new HashMap<>();
+		for(Map.Entry<String,String[]> entry : req.getParameterMap().entrySet())
+			pmap.put(entry.getKey(), entry.getValue()[0]);
+		return pmap;
 	}
 }

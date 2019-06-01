@@ -1,10 +1,12 @@
-package web;
+package controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
-import entities.Book;
-import entities.ProxyLibrary;
+import model.entities.Book;
+import model.entities.ProxyLibrary;
 import utils.Factory;
 import utils.InOut;
 import utils.Log;
@@ -13,8 +15,8 @@ public class MainTester {
 
 	public static void main(String[] args) {
 		
-		Log logger = Log.getInstance(true,true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt");
-		ProxyLibrary library = Factory.makeLibrary();
+		Log logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt");
+		ProxyLibrary library = Factory.makeLibrary("localhost","library","root","toor");
 		Scanner kbd = Factory.makeKbd();
 		
 		int cmd = InOut.selectOption(new String[] {
@@ -28,14 +30,12 @@ public class MainTester {
 					logger.data(book.toString());
 				break;
 			case 2:
-				library.newBook(
-					Factory.makeBook(
-						InOut.getStr("Creating new book:\nInsert title:", kbd),
-						InOut.getStr("Insert author:", kbd),
-						InOut.getStr("Insert genre:", kbd),
-						InOut.getStr("Insert path:", kbd)
-					)
-				);
+				Map<String,String> bmap = new HashMap<>();
+				bmap.put("title" , InOut.getStr("Creating new book:\nInsert title:", kbd));
+				bmap.put("author", InOut.getStr("Insert author:", kbd));
+				bmap.put("genre" , InOut.getStr("Insert genre:", kbd));
+				bmap.put("path"  , InOut.getStr("Insert path:", kbd));
+				library.newBook(Factory.makeBook(bmap));
 				break;
 			case 3:
 				library.newGenre(
@@ -54,7 +54,6 @@ public class MainTester {
 				);
 				break;
 		}
-		// TODO keySet to entrySet Set<Map.Entry<T>> to iterate
 	}
 
 }
