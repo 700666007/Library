@@ -33,13 +33,10 @@ public class Index extends HttpServlet {
 	private ViewHTML view;
 	
     public Index()  {
-    	// REPLACE "" WITH YOUR CUSTOM 'LOG FILE' PATH
-    	logger = Log.getInstance(false,"");
+    	logger = Log.getInstance(false,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
     	logger.info("APPLICATION STARTED");    
-    	// REPLACE "" WITH YOUR CUSTOM 'TEMPLATES' PATH
-    	view = Factory.makeView("","ENG");
-    	// FILL "" WITH DB PROPERTIES
-    	library = Factory.makeLibrary("mysql","","","","");
+    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates","ENG");
+    	library = Factory.makeLibrary("mysql","localhost","mylibrary","root","toor");
     }
     
 	/**
@@ -65,11 +62,14 @@ public class Index extends HttpServlet {
 				case "setGenre":	library.changeGenre(
 										pmap.get("tit"),pmap.get("gen"));	break;
 				// user's permissions
-				case "changelang":	view.setView(pmap.get("lang"));			break;
+				case "changelang":
+					header = view.setView(pmap.get("lang"),level,request);
+					break;
 				case "open":		Controller.open(pmap.get("path"));		break;
 				case "logout":	
 					request.getSession().invalidate();	
 					level = 0;
+					header = view.renderHeader(level,request);
 					logger.info("LOGOUT");
 					break;
 				case "login"   :
@@ -82,11 +82,11 @@ public class Index extends HttpServlet {
 						request.getSession().setAttribute("username", user.name());
 						request.getSession().setAttribute("level", user.isAdmin());
 						request.getSession().setAttribute("lang", user.lang());
-						view.setView(user.lang());
-						header = view.renderHeader(level,request);
 						level = 1;
+						header = view.setView(user.lang(),level,request);
 					} else
 						header = view.loginKO(header);
+					break;
 				default:
 					body = view.renderBody(level,body,library);
 			}

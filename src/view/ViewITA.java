@@ -21,9 +21,12 @@ public class ViewITA implements IView {
 		/**/sentences.put("KEY_TIT","Titolo");
 		/**/sentences.put("KEY_AUT","Autore");
 		/**/sentences.put("KEY_GEN","Genere");
+		/**/sentences.put("KEY_PATH", "Percorso");
 		/**/sentences.put("OPEN","Apri");
 		/**/sentences.put("SEARCH", "Cerca...");
 		/**/sentences.put("ERR_LOGIN", "Credenziali errate.");
+		/**/sentences.put("EMPTY_LIB","La tua libreria &egrave vuota.");
+		/**/sentences.put("ASK2LOG","Effettua il login per aggiungere un nuovo libro.");
 		
 		/*  BACK END CODES */
 		/*  Controller codes */

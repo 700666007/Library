@@ -18,8 +18,9 @@ public class ViewHTML implements IView {
 	
 	private String path;
 	private IView view;
-	public void setView(String type) {
+	public String setView(String type, int level, HttpServletRequest request) {
 		this.view = Factory.makeView(type);
+		return renderHeader(level,request);
 	}
 	
 	public ViewHTML(String path, IView view) {
@@ -70,10 +71,10 @@ public class ViewHTML implements IView {
 							"ADD_BUTT", "PLCHLDR_NEW_GEN", "DEL_BUTT", "EDIT_BUTT"}, "TOKEN");
 		
 		if(booksList.isEmpty())
-			return body.replace("<!-- TABLE -->", level==1
-													? fileContent("emptyLib")
-													: fileContent("emptyLib")
-													+ fileContent("ask2log"));
+			return body.replace("<!-- TABLE -->",
+					level==1 ? fileContent("emptyLib").replace("<!-- EMPTY_LIB -->", translate("EMPTY_LIB"))
+							 : fileContent("emptyLib").replace("<!-- EMPTY_LIB -->", translate("EMPTY_LIB"))
+							 + fileContent("ask2log").replace("<!-- ASK2LOG -->", translate("ASK2LOG")));
 		else {
 			body = body.replace("<!-- SEARCH & ORDER -->", fileContent("forms\\searchAndOrder"));
 			body = _translateFront(body, new String[] {"SEARCH","KEY_TIT","KEY_AUT","KEY_GEN"}, "SandO");

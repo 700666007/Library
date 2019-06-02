@@ -22,9 +22,12 @@ public class ViewENG implements IView {
 		/**/sentences.put("KEY_TIT","Title");
 		/**/sentences.put("KEY_AUT","Author");
 		/**/sentences.put("KEY_GEN","Genre");
+		/**/sentences.put("KEY_PATH", "Path");
 		/**/sentences.put("OPEN","Open");
 		/**/sentences.put("SEARCH", "Search...");
 		/**/sentences.put("LOGINKO", "Invalid credentials.");
+		/**/sentences.put("EMPTY_LIB","Your library is empty.");
+		/**/sentences.put("ASK2LOG","Log in to add a new book.");
 		
 		/*  BACK END CODES */
 		/*  Controller codes */
