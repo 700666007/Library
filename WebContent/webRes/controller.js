@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	$ascending = false;
 	$oldRadioVal = "title";
+	uncheck_check($oldRadioVal);
 	$rows = $("tr"); 
 	$('#filtro').keyup(function(event) {
 		updateApp('F', this.value);
@@ -29,8 +30,7 @@ function orderBooks(newVal) {
 	$ascending = $ascending ? false : true;
 }
 
-function checkFilter(rows, i, filter)
-{
+function checkFilter(rows, i, filter) {
 	var matches = !filter || filter == '' || makeBook(rows[i]).match(filter);
 	if(matches) 
 		$(rows[i]).show();
