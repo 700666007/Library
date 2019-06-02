@@ -19,7 +19,6 @@ import view.ViewITA;
 public abstract class Factory {
 	
 	static Log logger = Log.getInstance();
-	// TODO check access modifiers, useless methods, unnecessary parameters
 	private static LibraryDao _libraryImpl(String... params) {
 		LibraryDao library = new LibraryDaoImpl(params[0], params[1], params[2], params[3], params[4]);
 		return library;
@@ -43,7 +42,7 @@ public abstract class Factory {
 		logger.info(IView.translateLog("FACTORY_DB"));
 		return db;
 	}
-	public static Scanner makeKbd(IView view) {
+	public static Scanner makeKbd() {
 		Scanner kbd = new Scanner(System.in);
 		logger.debug(IView.translateLog("FACTORY_SCAN"));
 		return kbd;
@@ -62,8 +61,8 @@ public abstract class Factory {
 		logger.debug(IView.translateLog("FACTORY_USER"));
 		return user;
 	}
-	public static IView makeView(String path, String lang) {
-		IView v = new ViewHTML(path,makeView(lang));
+	public static ViewHTML makeView(String path, String lang) {
+		ViewHTML v = new ViewHTML(path,makeView(lang));
 		logger.debug(IView.translateLog("FACTORY_VIEW"));
 		return v;
 	}

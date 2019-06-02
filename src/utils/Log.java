@@ -40,7 +40,6 @@ public class Log
 	{
 		boolean isError = type.equals("ERROR");
 		String str =  _now() + " ["+type+"] "+message;
-
 		if(!isError)
 			InOut.print(str);
 		else

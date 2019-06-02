@@ -1,37 +1,26 @@
-$(document).ready(function()
-{
-	getJSON();
+$(document).ready(function() {
 	$ascending = false;
-	$oldVal = "title";
-	$('#filtro').keyup(function(event) { updateApp('F', this.value); });
-	$("#radtitle, #radauthor, #radgenre").click(function(event) { updateApp('O', this.value); });
-	$('.submitButton').click(function(event) { $.post('Home', $(this).parent().serialize(), refreshPage()); });
+	$oldRadioVal = "title";
+	$rows = $("tr"); 
+	$('#filtro').keyup(function(event) {
+		updateApp('F', this.value);
+	});
+	$("#radtitle, #radauthor, #radgenre")
+	.click(function(event) {
+		updateApp('O', this.value);
+	});
 });
 
-function updateApp(val, f)
-{
+function updateApp(val, f) {
 	if(val == 'F')	filterBooks(f);
 	if(val == 'O')	orderBooks(f);
 }
-
-function filterBooks(filter)
-{
-	var bookTable = document.getElementById('bookTable'),
-		rows = bookTable.getElementsByTagName('tr');
-	for(var i=1; i < rows.length; i++)
-		checkFilter(rows, i, filter);
+function filterBooks(filter,rows) {
+	for(var i=1; i < $rows.length; i++)
+		checkFilter($rows, i, filter);
 }
-
-function checkFilter(rows, i, filter)
-{
-	var matches = !filter || filter == '' || makeBook(rows[i]).match(filter);
-	if(matches) $(rows[i]).show();
-	else $(rows[i]).hide();
-}
-
-function orderBooks(newVal)
-{
-	if($oldVal != newVal)
+function orderBooks(newVal) {
+	if($oldRadioVal != newVal)
 		$ascending = true;
 	uncheck_check(newVal);
 	$('#bookTable').find('tr:not(".heads")').sort(function(a,b) {
@@ -40,12 +29,27 @@ function orderBooks(newVal)
 	$ascending = $ascending ? false : true;
 }
 
+function checkFilter(rows, i, filter)
+{
+	var matches = !filter || filter == '' || makeBook(rows[i]).match(filter);
+	if(matches) 
+		$(rows[i]).show();
+	else 
+		$(rows[i]).hide();
+}
+
+
+
 function sortTable(a,b)
 {
 	if($ascending)
-		return td2sort(a) > td2sort(b) ? 1 : td2sort(a) < td2sort(b) ? -1 : 0;
+		return td2sort(a) > td2sort(b) 
+					? 1 : td2sort(a) < td2sort(b)
+							? -1 : 0;
 	else
-		return td2sort(a) > td2sort(b) ? -1 : td2sort(a) < td2sort(b) ? 1 : 0;
+		return td2sort(a) > td2sort(b)
+					? -1 : td2sort(a) < td2sort(b)
+							? 1 : 0;
 	return 0;
 }
 
@@ -53,13 +57,9 @@ function uncheck_check(v)
 {
 	var currId = "#rad" + getRadioVal(), newId = "#rad" + v;
 	$(currId).prop("checked", false); 	$(newId).prop("checked", true);
-	$oldVal = v;
+	$oldRadioVal = v;
 }
 function getRadioId() { return {'title' : 0 , 'author' : 1, 'genre' : 2}[getRadioVal()]; }
 function getRadioVal() { return $("input:radio:checked").val(); }
-function refreshPage() { window.location.replace('home.jsp'); }
+function refreshPage() { window.location.replace('Home'); }
 function td2sort(x) { return x.children[getRadioId()].innerHTML.toLowerCase(); }
-
-
-updateApp();
-

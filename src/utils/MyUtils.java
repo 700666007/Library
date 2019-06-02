@@ -68,6 +68,7 @@ public abstract class MyUtils {
 			FileWriter fw = new FileWriter(new File(path), true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write(str);
+			bw.newLine();
 			bw.flush();
 			bw.close();
 			return true;

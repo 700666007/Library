@@ -16,6 +16,7 @@ import utils.Factory;
 import utils.Log;
 import utils.MyUtils;
 import view.IView;
+import view.ViewHTML;
 
 /**
  * Servlet implementation class Index
@@ -29,15 +30,13 @@ public class Index extends HttpServlet {
      */
 	private Log logger;
 	private ProxyLibrary library;
-	private IView view;
+	private ViewHTML view;
 	
     public Index()  {
-    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates");
     	logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
-    	logger.info("APPLICATION STARTED");
-    	logger.debug("View created");
+    	logger.info("APPLICATION STARTED");    
+    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates","ENG");
     	library = Factory.makeLibrary("mysql","localhost","mylibrary","root","toor");
-    	logger.debug("Library created");
     }
     
 	/**
@@ -49,7 +48,7 @@ public class Index extends HttpServlet {
 		Map<String,String> pmap = MyUtils.request2map(request);
 		String action = Controller.validate(level, pmap.remove("action"));
 		
-		String header = "";
+		String header = view.renderHeader(level,request);;
 		String body = view.fileContent("body");
 		if(action!=null)
 			switch(action) {
@@ -63,6 +62,7 @@ public class Index extends HttpServlet {
 				case "setGenre":	library.changeGenre(
 										pmap.get("tit"),pmap.get("gen"));	break;
 				// user's permissions
+				case "changelang":	view.setView(pmap.get("lang"));			break;
 				case "logout":	
 					request.getSession().invalidate();	
 					level = 0;
@@ -81,12 +81,13 @@ public class Index extends HttpServlet {
 						request.getSession().setAttribute("lang", user.lang());
 						level = 1;
 					} else
-						body = view.fileContent("forms\\loginKO")+body;
+						header = view.loginKO(header);
+				default:
+					body = view.renderBody(level,body,library);
 			}
-		
-		header = view.renderHeader(level,request);
-		body = view.renderBody(level,body,library);
+		// TODO trim values
 		PrintWriter pw = response.getWriter();
+		body = view.renderBody(level,body,library);
 		pw.append(header+body+view.fileContent("footer"));
 		logger.info("PRINT_RESP");
 		

@@ -6,8 +6,8 @@ import java.util.Map;
 
 import model.dbms.Database;
 import model.dbms.IDatabase;
-import model.entities.LibraryDaoImpl.SCHEMA_TOKEN;
 
+@SuppressWarnings("unused")
 public class OracleDb extends Database implements IDatabase, IDBActions  {
 
 	@Override
@@ -16,32 +16,32 @@ public class OracleDb extends Database implements IDatabase, IDBActions  {
 	}
 
 	@Override
-	public List<Map<String, String>> fetchAll(SCHEMA_TOKEN table) {
+	public List<Map<String, String>> fetchAll(String table) {
 		return null;
 	}
 
 	@Override
-	public List<Map<String, String>> fetch(SCHEMA_TOKEN content, SCHEMA_TOKEN table, SCHEMA_TOKEN orderBy) {
+	public List<Map<String, String>> fetch(String content, String table, String orderBy) {
 		return null;
 	}
 
 	@Override
-	public boolean delete(SCHEMA_TOKEN table, SCHEMA_TOKEN key, String value) {
+	public boolean delete(String table, String key, String value) {
 		return false;
 	}
 
 	@Override
-	public boolean insert(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String value) {
+	public boolean insert(String table, String column, String value) {
 		return false;
 	}
 
 	@Override
-	public boolean insert(SCHEMA_TOKEN table, Map<String, String> map) {
+	public boolean insert(String table, Map<String, String> map) {
 		return false;
 	}
 
 	@Override
-	public boolean update(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String newValue, String title) {
+	public boolean update(String table, String column, String newValue, String title) {
 		return false;
 	}
 

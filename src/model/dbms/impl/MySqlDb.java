@@ -8,7 +8,6 @@ import java.util.Map;
 
 import model.dbms.Database;
 import model.dbms.IDatabase;
-import model.entities.LibraryDaoImpl.SCHEMA_TOKEN;
 import utils.Log;
 import utils.MyUtils;
 import view.IView;
@@ -59,7 +58,7 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 		return null; 
 	}
 	@Override
-	public List<Map<String,String>> fetchAll(SCHEMA_TOKEN table) {
+	public List<Map<String,String>> fetchAll(String table) {
 		try {
 			return rows("SELECT * FROM "+table);
 		} catch(Exception e) {
@@ -68,7 +67,7 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 		return null; 
 	}
 	@Override
-	public List<Map<String,String>> fetch(SCHEMA_TOKEN content, SCHEMA_TOKEN table, SCHEMA_TOKEN orderBy) {
+	public List<Map<String,String>> fetch(String content, String table, String orderBy) {
 		try {
 			return rows("SELECT "+content+" FROM "+table+(
 					orderBy!=null?" ORDER BY "+orderBy:"")
@@ -79,13 +78,12 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 		return new ArrayList<Map<String,String>>();
 	}
 	@Override
-	public boolean delete(SCHEMA_TOKEN table, SCHEMA_TOKEN key, String value) {
+	public boolean delete(String table, String key, String value) {
 		try {
 			if( execute(
 					"DELETE FROM "+table+" WHERE "+key+" = ?",
 					new String[] {value} )
 			)
-				// TRANSALTE THIS TODO
 				logger.info(IView.translateLog("SUX_DEL")+key+":"+
 							value+IView.translateLog("TOK_FROM")+table+"'");
 			return true;
@@ -95,7 +93,7 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 		return false;
 	}
 	@Override
-	public boolean insert(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String value) {
+	public boolean insert(String table, String column, String value) {
 		try {
 			if( execute(
 					"INSERT INTO "+table+"("+column+") VALUES (?)",
@@ -110,7 +108,7 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 		return false;
 	}
 	@Override
-	public boolean insert(SCHEMA_TOKEN table, Map<String,String> map) {
+	public boolean insert(String table, Map<String,String> map) {
 		try {
 			int size = map.size();
 			String query = "INSERT INTO "+table+
@@ -128,7 +126,7 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 		return false;
 	}
 	@Override
-	public boolean update(SCHEMA_TOKEN table, SCHEMA_TOKEN column, String newValue, String title) {
+	public boolean update(String table, String column, String newValue, String title) {
 		try {								
 			if(execute("UPDATE "+table+" SET "+column+" = ? WHERE title = ?",
 					new String[] {newValue.toString(),title} ))

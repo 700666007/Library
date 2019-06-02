@@ -18,7 +18,7 @@ public class MainTester {
 
 		String type = "ITA";
 		IView view = Factory.makeView(type);
-		Scanner kbd = Factory.makeKbd(view);
+		Scanner kbd = Factory.makeKbd();
 		Log logger = Log.getInstance(
 			true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt"
 		);

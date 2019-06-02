@@ -7,7 +7,7 @@
 		<title>LIBRARY</title>
 		<link rel="stylesheet" type="text/css" href="webRes/style.css" />
 		<script src="webRes/jquery.js"></script>
-		<script src="webRes/fetchData.js"></script>
+		<script src="webRes/fetch.js"></script>
 		<script src="webRes/model.js"></script>
 	</head>
 	<body>

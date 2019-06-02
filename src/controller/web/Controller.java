@@ -52,10 +52,10 @@ class Controller {
 			if((u = library.getUser(username,pwd)) == null)
 				throw new NullPointerException();
 		} catch(Exception e) {
-			logger.info(IView.translateLog("LOGIN_FAILED"));
+			logger.info(IView.translateLog("ERR_LOGIN"));
 			return u;
 		}
-		logger.info(IView.translateLog("LOGIN_SUCCESS"));
+		logger.info(IView.translateLog("SUX_LOGIN"));
 		return u;
 	}
 	static int setUserLvl(HttpServletRequest req) {

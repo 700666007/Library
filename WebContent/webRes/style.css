@@ -20,6 +20,7 @@ TABLE
 }
 TD { padding: 5px; }
 TH { font-size: 25px; }
+TH, .red { font-weight: bold; color: red; }
 .paddBott { padding-bottom: 20px; }
 .inline { display: inline-block; }
 .centered { text-align: center; }
@@ -27,3 +28,5 @@ TH { font-size: 25px; }
 .pointer { cursor: pointer; }
 .formWrapper { text-align: center; padding-left: 15%; padding-right: 15%; }
 #search { margin-left: 5%; }
+.red { color: red; }
+.bold { font-weight: bold; }
