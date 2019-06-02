@@ -16,6 +16,7 @@ import utils.Factory;
 import utils.Log;
 import utils.MyUtils;
 import view.IView;
+import view.ViewHTML;
 
 /**
  * Servlet implementation class Index
@@ -29,12 +30,12 @@ public class Index extends HttpServlet {
      */
 	private Log logger;
 	private ProxyLibrary library;
-	private IView view;
+	private ViewHTML view;
 	
     public Index()  {
-    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates");
     	logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
-    	logger.info("APPLICATION STARTED");
+    	logger.info("APPLICATION STARTED");    
+    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates","ENG");
     	logger.debug("View created");
     	library = Factory.makeLibrary("mysql","localhost","mylibrary","root","toor");
     	logger.debug("Library created");

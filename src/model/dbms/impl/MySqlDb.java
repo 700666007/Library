@@ -85,7 +85,6 @@ public class MySqlDb extends Database implements IDatabase, IDBActions {
 					"DELETE FROM "+table+" WHERE "+key+" = ?",
 					new String[] {value} )
 			)
-				// TRANSALTE THIS TODO
 				logger.info(IView.translateLog("SUX_DEL")+key+":"+
 							value+IView.translateLog("TOK_FROM")+table+"'");
 			return true;

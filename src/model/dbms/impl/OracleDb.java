@@ -8,6 +8,7 @@ import model.dbms.Database;
 import model.dbms.IDatabase;
 import model.entities.LibraryDaoImpl.SCHEMA_TOKEN;
 
+@SuppressWarnings("unused")
 public class OracleDb extends Database implements IDatabase, IDBActions  {
 
 	@Override
