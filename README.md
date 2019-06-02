@@ -2,7 +2,7 @@
 Dynamic Web Project - Showcase of various Design Patterns
 
 Empty library:
-[[https://github.com/700666007/Library/blob/master/mockups/emptyLib.png|alt=emptyLib]]
+[[https://github.com/700666007/Library/blob/master/mockups/emptyLib.png]]
 
 Empty library (admin)
 [[|alt=emptyLibAdm]]
