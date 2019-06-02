@@ -2,6 +2,7 @@ package view;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,18 +28,18 @@ public class ViewHTML implements IView {
 	}
 	public String loginKO(String header) {
 		header = header.replace("<!-- LOGINKO -->", fileContent("loginKO"));
-		return header.replace("<!-- LOGINKO -->", view.translate("LOGINKO"));
+		return header.replace("<!-- LOGINKO -->", translate("ERR_LOGIN"));
 	}
 	public String renderHeader(int level, HttpServletRequest req) {
 		String replacement = level==0
 					? fileContent("forms\\login")
 					: "<div class='centered'><div class='centered inline'>"+
-					  view.translate("WELCOME")+
+					  translate("WELCOME")+
 					  req.getSession().getAttribute("username")+
 					  "!</div>"+fileContent("forms\\logout")+"</div>";
 		return fileContent("header").replace("<!-- WELCOME_MESSAGE -->", replacement)
 									.replace("<!-- LANG_BUTT -->", fileContent("forms\\changelang"))
-									.replace("<!-- LANG_BUTT -->", view.translate("CHANGE_LANG"));
+									.replace("<!-- LANG_BUTT -->", translate("CHANGE_LANG"));
 	}
 	public String renderBody(int level, String body, LibraryDao library) {
 
@@ -78,10 +79,10 @@ public class ViewHTML implements IView {
 			body = _translateFront(body, new String[] {"SEARCH","KEY_TIT","KEY_AUT","KEY_GEN"}, "SandO");
 			
 			return body.replace("<!-- TABLE -->", "<div><table id='bookTable'><tr class='heads'>"+
-					  							  "<th scope='col'>"+view.translate("KEY_TIT").toUpperCase()+
-					  							  "</th><th scope='col'>"+view.translate("KEY_AUT").toUpperCase()+
-					  							  "</th><th scope='col'>"+view.translate("KEY_GEN").toUpperCase()+
-					  							  "</th><th scope='col'>"+view.translate("KEY_PATH").toUpperCase()+
+					  							  "<th scope='col'>"+translate("KEY_TIT").toUpperCase()+
+					  							  "</th><th scope='col'>"+translate("KEY_AUT").toUpperCase()+
+					  							  "</th><th scope='col'>"+translate("KEY_GEN").toUpperCase()+
+					  							  "</th><th scope='col'>"+translate("OPEN").toUpperCase()+
 					  							  "</th></tr><!-- TABLE_CONTENT --></table></div>"
 					   							  .replace("<!-- TABLE_CONTENT -->", render(booksList)));
 		}
@@ -89,7 +90,7 @@ public class ViewHTML implements IView {
 	private String _translateFront(String body, String[] tokens, String toReplace) {
 		for(int i=0; i<tokens.length; i++)
 			body = body.replace("<!-- "+toReplace+i+" -->",
-								view.translate(tokens[i]));
+								translate(tokens[i]));
 		return body;
 	}
 	public String fileContent(String path) {
@@ -116,8 +117,12 @@ public class ViewHTML implements IView {
 	}
 	public String render(Book b) {
 		String html = "<tr style='text-align: center'>";
-		for(String key : new String[] {"title","author","genre","path"})
-			html += "<td>"+b.toMap().get(key)+"</td>";
+		Map<String,String> bmap = b.toMap();
+		for(String key : new String[] {"title","author","genre"})
+			html += "<td>"+bmap.get(key)+"</td>";
+		html += "<td>"+fileContent("forms\\open")
+						.replace("<!-- PATH -->", bmap.get("path"))+
+		"</td>";
 		return html+"</tr>";
 	}
 	public String render(List<Book> books) {

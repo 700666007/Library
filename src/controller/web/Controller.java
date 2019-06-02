@@ -1,5 +1,7 @@
 package controller.web;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.util.HashMap;
 //import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ class Controller {
     	rights.put("newGenre", 1);
     	rights.put("delGenre", 1);
     	rights.put("setGenre", 1);
+    	rights.put("open", 0);
     	rights.put("changelang", 0);
     	rights.put("login", 0);
     	rights.put("logout", 0);
@@ -68,6 +71,16 @@ class Controller {
 		}
 		logger.data(IView.translateLog("USR_LVL"),level.toString());
 		return level;
+	}
+	static boolean open(String path) {
+		try {
+			File f = new File(path);
+			Desktop.getDesktop().open(f);
+		} catch(Exception e) {
+			logger.error("ERR_CMD", e);
+			return false;
+		}
+		return true;
 	}
 //	static JsonArray jsonResponse(ProxyLibrary library) {
 //		

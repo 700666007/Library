@@ -33,10 +33,13 @@ public class Index extends HttpServlet {
 	private ViewHTML view;
 	
     public Index()  {
-    	logger = Log.getInstance(true,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
+    	// REPLACE "" WITH YOUR CUSTOM 'LOG FILE' PATH
+    	logger = Log.getInstance(false,"");
     	logger.info("APPLICATION STARTED");    
-    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates","ENG");
-    	library = Factory.makeLibrary("mysql","localhost","mylibrary","root","toor");
+    	// REPLACE "" WITH YOUR CUSTOM 'TEMPLATES' PATH
+    	view = Factory.makeView("","ENG");
+    	// FILL "" WITH DB PROPERTIES
+    	library = Factory.makeLibrary("mysql","","","","");
     }
     
 	/**
@@ -48,7 +51,7 @@ public class Index extends HttpServlet {
 		Map<String,String> pmap = MyUtils.request2map(request);
 		String action = Controller.validate(level, pmap.remove("action"));
 		
-		String header = view.renderHeader(level,request);;
+		String header = view.renderHeader(level,request);
 		String body = view.fileContent("body");
 		if(action!=null)
 			switch(action) {
@@ -63,6 +66,7 @@ public class Index extends HttpServlet {
 										pmap.get("tit"),pmap.get("gen"));	break;
 				// user's permissions
 				case "changelang":	view.setView(pmap.get("lang"));			break;
+				case "open":		Controller.open(pmap.get("path"));		break;
 				case "logout":	
 					request.getSession().invalidate();	
 					level = 0;
@@ -77,15 +81,15 @@ public class Index extends HttpServlet {
 					if(user!=null) {
 						request.getSession().setAttribute("username", user.name());
 						request.getSession().setAttribute("level", user.isAdmin());
-						// TODO UI language
 						request.getSession().setAttribute("lang", user.lang());
+						view.setView(user.lang());
+						header = view.renderHeader(level,request);
 						level = 1;
 					} else
 						header = view.loginKO(header);
 				default:
 					body = view.renderBody(level,body,library);
 			}
-		// TODO trim values
 		PrintWriter pw = response.getWriter();
 		body = view.renderBody(level,body,library);
 		pw.append(header+body+view.fileContent("footer"));

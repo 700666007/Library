@@ -80,7 +80,7 @@ public abstract class MyUtils {
 	public static Map<String,String> request2map(HttpServletRequest req) {
 		Map<String,String> pmap = new HashMap<>();
 		for(Map.Entry<String,String[]> entry : req.getParameterMap().entrySet())
-			pmap.put(entry.getKey(), entry.getValue()[0]);
+			pmap.put(entry.getKey(), entry.getValue()[0].trim());
 		return pmap;
 	}
 }

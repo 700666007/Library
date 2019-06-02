@@ -22,7 +22,7 @@ public class ViewENG implements IView {
 		/**/sentences.put("KEY_TIT","Title");
 		/**/sentences.put("KEY_AUT","Author");
 		/**/sentences.put("KEY_GEN","Genre");
-		/**/sentences.put("KEY_PATH","Path");
+		/**/sentences.put("OPEN","Open");
 		/**/sentences.put("SEARCH", "Search...");
 		/**/sentences.put("LOGINKO", "Invalid credentials.");
 		
@@ -36,12 +36,13 @@ public class ViewENG implements IView {
 		/**/sentences.put("USRNM", 		"Username: ");
 		/**/sentences.put("PSWD", 		"Password: ");
 		/**/sentences.put("PRINT_RESP", "Response printed.");
+		/**/sentences.put("ERR_CMD", 	"Command not executed.");
 		/**/
 		/*  Database codes */
 		/**/sentences.put("ROW", 			"Database.row(): ");
 		/**/sentences.put("CONN", 			"Connecting to database...");
 		/**/sentences.put("SUX_CONN", 		"Connection established!");
-		/**/sentences.put("ERR_CONN", 		"Couldn't connect to database...");
+		/**/sentences.put("ERR_CONN", 		"Couldn't connect to database.");
 		/**/sentences.put("ERR_FETCH", 		"Operation (FETCH) failed.");
 		/**/sentences.put("SUX_DEL", 		"Deleted '");
 		/**/sentences.put("ERR_DEL", 		"Operation (DELETE) failed.");
@@ -94,7 +95,7 @@ public class ViewENG implements IView {
 		/**/sentences.put("OPT_DEL_GENRE", 		"Delete genre");
 		/**/sentences.put("OPT_UPD_BOOK_GENRE", "Change book's genre");
 		/**/
-		/**/sentences.put("REASON", 			" Reason: \n");
+		/**/sentences.put("REASON", 			" Reason:");
 		/**/sentences.put("", "");
 	}
 
