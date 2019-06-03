@@ -33,9 +33,9 @@ public class Index extends HttpServlet {
 	private ViewHTML view;
 	
     public Index()  {
-    	logger = Log.getInstance(false,"C:\\Users\\LoneRaven\\Desktop\\log.txt");
+    	logger = Log.getInstance(false,"yourPath\\log.txt");
     	logger.info("APPLICATION STARTED");    
-    	view = Factory.makeView("D:\\HQ\\Projects\\git_vcs\\Library\\WebContent\\templates","ENG");
+    	view = Factory.makeView("yourPath\\Library\\WebContent\\templates","ENG");
     	library = Factory.makeLibrary("mysql","localhost","mylibrary","root","toor");
     }
     
