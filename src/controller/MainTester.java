@@ -20,7 +20,7 @@ public class MainTester {
 		IView view = Factory.makeView(type);
 		Scanner kbd = Factory.makeKbd();
 		Log logger = Log.getInstance(
-			true,"C:\\Users\\LoneRaven\\Desktop\\logger.txt"
+			true,"yourPath\\logger.txt"
 		);
 		ProxyLibrary library = Factory.makeLibrary("mysql","localhost","library","root","toor");
 		int cmd = InOut.selectOption(new String[] {
